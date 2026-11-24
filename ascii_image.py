@@ -3,24 +3,34 @@ import os
 import platform
 import time
 
+CLEAR_CMD = 'cls'
+
 """ Данная программа выводит видео в ascii формате она работает что-то типа как пирога
 ASCII-картинка вытянется в одну горизонтальную линию, а затем 2, затем 3 и т.д, что в итоге
 превращается в единное видео """
 
+currect_os_command = platform.system()
+path_os_command = platform.system()
+
+currect_os_command = input("Введите название вашей ОС (по типу Linux, Windows и т.д): ").lower()
+
+if currect_os_command == 'windows':
+    path_os_command = input("введи путь к папке: ")
+    path = f'r{path_os_command}'  # r мы используем, чтобы windows считал
+                                    # что мы используем как обычный текст, а не команду
+
+elif currect_os_command == 'linux':
+    path_os_command = input("введи путь к папке: ")
+    path = f'/{path_os_command}'
+    
 string = " ,./';[]+-!@#$%^&*()*"
 coef = 255 / (len(string) - 1)
 
-currect_os_command = platform.system()
+if currect_os_command == 'windows':
+    pass
+else:
+    CLEAR_CMD = 'clear' 
 
-CLEAR_CMD = 'cls' if currect_os_command == 'Windows' else 'clear' 
-
-path_os_command = platform.system()
-if path_os_command == 'Windows':
-    path = r'путь' #r мы используем, чтобы windows считал
-                                                  # что мы используем как обычный текст, а не команду
-
-elif path_os_command == 'Linux':
-    path = '/путь к файлу'
 
 video = cv2.VideoCapture(path)
 
@@ -37,7 +47,7 @@ while True:
                 # то цикл заканчивается
 
     gray_video = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # делает из видео в черно-белый оттенк
-    height, width = gray_video.shape #frame.shape возращает 3 значение
+    height, width = gray_video.shape #frame.shape возращает 2 значение
     spisok = []
     for y in range(0, height - 1, 5): # шаг 5 мы деляем для сжатие видео и компенсации форма шрифта
         s = ""
